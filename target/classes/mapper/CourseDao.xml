@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbd.dao.CourseDao">
+
+    <resultMap id="Teacher_mao_course" type="com.bbd.entity.Course">
+        <id property="courseId" column="course_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseTime" column="course_time"/>
+        <result property="courseTea" column="course_tea"/>
+
+        <association property="teacher" javaType="com.bbd.entity.Teacher">
+        <id property="teacherId" column="teacher_id"/>
+        <result property="teacherName" column="teacher_name"/>
+        <result property="teacherEdu" column="teacher_edu"/>
+        </association>
+    </resultMap>
+
+    <select id="queryCourse" resultMap="Teacher_mao_course">
+        select c.*,t.*
+      from teacher t
+			JOIN course c
+			ON c.course_tea=t.teacher_id
+    </select>
+
+    <select id="queryByCourseId" resultMap="Teacher_mao_course">
+        SELECT c.*,t.*
+        FROM course c
+        JOIN teacher t
+        ON c.course_tea=t.teacher_id
+        WHERE c.course_id=#{courseId}
+    </select>
+
+    <select id="queryByTeacherId" resultMap="Teacher_mao_course">
+        select t.*,c.*
+      from course c
+			JOIN teacher t
+			ON c.course_tea=t.teacher_id
+			where t.teacher_id=#{teacherId} and t.del_state=0
+    </select>
+
+
+
+
+</mapper>
